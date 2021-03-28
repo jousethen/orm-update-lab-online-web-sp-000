@@ -22,6 +22,9 @@ class Student
     end
   end
   
+  def update
+    
+  end
   def self.create(name:, grade:)
     student = Student.new(name, grade)
     student.save
@@ -36,6 +39,16 @@ class Student
     new_student  # return the newly created instance
   end
   
+  def self.find_by_name(name)
+    sql= <<-SQL
+          SELECT * FROM students
+          WHERE name = ?
+          SQL
+ 
+    DB[:conn].execute(sql, name).map do |row|
+      self.new_from_db(row)
+    end.first
+  end
   
   
   def self.create_table
